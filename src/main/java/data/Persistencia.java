@@ -28,11 +28,16 @@ public class Persistencia {
         Sucursal s1 = sucursales.get(0);
         Sucursal s2 = sucursales.get(1);
         
-        VehiculoElectrico v1 = new VehiculoElectrico("AE123FG", "Renault", "Kangoo E-Tech", 2020, 1000, s1, 16);
-        VehiculoElectrico v2 = new VehiculoElectrico("AF456HI", "Ford", "E-Transit", 2021, 1300, s2, 16);
+        Marca mercedes = new Marca("Mercedes", "Alemania");
+        Marca renault = new Marca("Renault", "Francia");
+        Marca ford = new Marca("Ford", "EEUU");
+        Marca iveco = new Marca("Iveco", "Italia");
+        
+        VehiculoElectrico v1 = new VehiculoElectrico("AE123FG", renault, "Kangoo E-Tech", 2020, 1000, s1, 16);
+        VehiculoElectrico v2 = new VehiculoElectrico("AF456HI", ford, "E-Transit", 2021, 1300, s2, 16);
 
-        VehiculoCombustible v3 = new VehiculoCombustible("AC789JK", "Iveco", "Daily", 2023, 1200, s1, 8, 1.5);
-        VehiculoCombustible v4 = new VehiculoCombustible("AD321LM", "Mercedes", "Sprinter", 2020, 1200, s2, 7, 1);
+        VehiculoCombustible v3 = new VehiculoCombustible("AC789JK", iveco, "Daily", 2023, 1200, s1, 8, 1.5);
+        VehiculoCombustible v4 = new VehiculoCombustible("AD321LM", mercedes, "Sprinter", 2020, 1200, s2, 7, 1);
         
         vehiculos.add(v1);
         vehiculos.add(v2);
@@ -44,6 +49,14 @@ public class Persistencia {
         return vehiculos;
     }
     
+    public static ArrayList<Sucursal> getSucursales(){
+        return sucursales;
+    }
+    
+    public static void agregarVehiculo(Vehiculo vehiculo){
+        vehiculos.add(vehiculo);
+    }
+    
     public static Optional<Vehiculo> getVehiculo(String patente){
         return vehiculos.stream()
                 .filter(v -> v.getPatente().equals(patente))
@@ -53,6 +66,20 @@ public class Persistencia {
     public static void inicializar(){
         inicializarResponsables();
         inicializarSucursales();
-        inicializarVehiculos();
+    }
+    
+    public static void guardarVehiculo(String patente, String marca, String pais, String modelo, int anio, 
+        double capacidadCarga, int indiceSucursal, String tipoVehiculo, double consumoOKwh, double kmPorLitro, double litrosExtra) {
+        
+        Marca nuevaMarca = new Marca(marca, pais);
+        Sucursal sucursal = sucursales.get(indiceSucursal);
+        
+        if ("ELECTRICO".equals(tipoVehiculo)) {
+            VehiculoElectrico vehiculo = new VehiculoElectrico(patente, nuevaMarca, modelo, anio, capacidadCarga, sucursal, consumoOKwh);
+            vehiculos.add(vehiculo);
+        } else {
+            VehiculoCombustible vehiculo = new VehiculoCombustible(patente, nuevaMarca, modelo, anio, capacidadCarga, sucursal, kmPorLitro, litrosExtra);
+            vehiculos.add(vehiculo);
+        }
     }
 }

@@ -35,6 +35,10 @@ public class ListarVehiculosView extends javax.swing.JFrame {
             });
         }
     }
+    
+    public void actualizarLista(){
+        listarVehiculos();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
