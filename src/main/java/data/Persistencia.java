@@ -49,6 +49,14 @@ public class Persistencia {
         return vehiculos;
     }
     
+    public static ArrayList<Sucursal> getSucursales(){
+        return sucursales;
+    }
+    
+    public static void agregarVehiculo(Vehiculo vehiculo){
+        vehiculos.add(vehiculo);
+    }
+    
     public static Optional<Vehiculo> getVehiculo(String patente){
         return vehiculos.stream()
                 .filter(v -> v.getPatente().equals(patente))
@@ -58,6 +66,20 @@ public class Persistencia {
     public static void inicializar(){
         inicializarResponsables();
         inicializarSucursales();
-        inicializarVehiculos();
+    }
+    
+    public static void guardarVehiculo(String patente, String marca, String pais, String modelo, int anio, 
+        double capacidadCarga, int indiceSucursal, String tipoVehiculo, double consumoOKwh, double kmPorLitro, double litrosExtra) {
+        
+        Marca nuevaMarca = new Marca(marca, pais);
+        Sucursal sucursal = sucursales.get(indiceSucursal);
+        
+        if ("ELECTRICO".equals(tipoVehiculo)) {
+            VehiculoElectrico vehiculo = new VehiculoElectrico(patente, nuevaMarca, modelo, anio, capacidadCarga, sucursal, consumoOKwh);
+            vehiculos.add(vehiculo);
+        } else {
+            VehiculoCombustible vehiculo = new VehiculoCombustible(patente, nuevaMarca, modelo, anio, capacidadCarga, sucursal, kmPorLitro, litrosExtra);
+            vehiculos.add(vehiculo);
+        }
     }
 }
